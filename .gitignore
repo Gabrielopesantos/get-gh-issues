@@ -17,3 +17,5 @@
 # Others
 .idea
 .vscode
+.basic-auth-creds
+bin/*

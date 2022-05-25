@@ -1,40 +1,31 @@
 package auth
 
 import (
-	"bufio"
 	"errors"
-	"fmt"
 	"github.com/spf13/cobra"
-	"io"
-	"log"
-	"os"
+	"net/http"
 )
 
 type LoginOptions struct {
-	Token []byte
+	Token       string
+	GitProtocol string
+	Hostname    string
 }
 
 func NewCmdLogin() *cobra.Command {
-	opts := &LoginOptions{}
+	opts := &LoginOptions{
+		GitProtocol: "https",
+		Hostname:    "github.com",
+	}
 
-	var withToken bool
+	var token string
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "",
 		Long:  ``,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if !withToken {
+			if token == "" {
 				return errors.New("only token authentication is supported for now")
-			}
-			// Read token (Tmp)
-			//buf := &bytes.Buffer{}
-			//reader := io.NopCloser(buf)
-			//defer reader.Close()
-			reader := bufio.NewReader(os.Stdin)
-			token, err := io.ReadAll(reader)
-			log.Println(token, err)
-			if err != nil {
-				return fmt.Errorf("failed to read token from standard input: %w", err)
 			}
 
 			opts.Token = token
@@ -42,16 +33,20 @@ func NewCmdLogin() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVar(&withToken, "with-token", true, "Read token from standard input")
+	cmd.Flags().StringVar(&token, "token", "", "GitHub personal access token")
 
 	return cmd
 }
 
 func runLogin(opts *LoginOptions) error {
-	// Validate login
-	
+	httpClient := newHttpClient()
+	// Check min scopes
+	// Get current logged username
+	// Write to files
 	return nil
 }
 
-func validateAuthCredentials() {
+// Has to be put in a separate package
+func newHttpClient() *http.Client {
+	return http.DefaultClient
 }

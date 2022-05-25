@@ -13,7 +13,13 @@ CLI tool get issues from a repository (more or less a subset of the `issues` end
 - Caching of requests (Limited to 5000 per hour)
 
 ## CLI
-- TBD
+- auth
+  - status
+  - login
+  - logout
+- issues
+  - get
+    - -filters
 
 ## License
 - MIT
